@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Speed Reducer Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000080; /* Warna latar belakang biru gelap menyerupai contoh */
+            color: white;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            border-bottom: 1px solid white;
+            padding-bottom: 10px;
+        }
+        .input-section, .output-section {
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        label {
+            width: 150px;
+            font-weight: bold;
+        }
+        input {
+            padding: 5px;
+            width: 100px;
+            border: none;
+            border-radius: 3px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .output-section {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .output-section p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Example: Double Speed Reducer</h2>
+        
+        <div class="input-section">
+            <h3>Given:</h3>
+            <div class="input-group">
+                <label for="n1">n1 (rpm):</label>
+                <input type="number" id="n1" value="500">
+            </div>
+            <div class="input-group">
+                <label for="N1">N1 (teeth):</label>
+                <input type="number" id="N1" value="20">
+            </div>
+            <div class="input-group">
+                <label for="N2">N2 (teeth):</label>
+                <input type="number" id="N2" value="70">
+            </div>
+            <div class="input-group">
+                <label for="N3">N3 (teeth):</label>
+                <input type="number" id="N3" value="18">
+            </div>
+            <div class="input-group">
+                <label for="N4">N4 (teeth):</label>
+                <input type="number" id="N4" value="54">
+            </div>
+            <button onclick="calculateSolution()">Hitung (Find n4)</button>
+        </div>
+
+        <div class="output-section" id="solutionBox">
+            <h3>Solution:</h3>
+            <p id="step1"></p>
+            <p id="step2"></p>
+            <p id="step3"></p>
+            <p id="step4"></p>
+            <br>
+            <p style="color: lightyellow; font-weight: bold;" id="torqueNote"></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateSolution() {
+            // Mengambil nilai input
+            const n1 = parseFloat(document.getElementById('n1').value);
+            const N1 = parseFloat(document.getElementById('N1').value);
+            const N2 = parseFloat(document.getElementById('N2').value);
+            const N3 = parseFloat(document.getElementById('N3').value);
+            const N4 = parseFloat(document.getElementById('N4').value);
+
+            // Validasi input
+            if (isNaN(n1) || isNaN(N1) || isNaN(N2) || isNaN(N3) || isNaN(N4)) {
+                alert("Harap masukkan semua nilai dengan angka yang valid.");
+                return;
+            }
+
+            // Melakukan perhitungan
+            const n2 = n1 * (N1 / N2);
+            const n3 = n2; // Gear 2 dan 3 berada pada poros yang sama
+            const n4 = n3 * (N3 / N4);
+            const totalReduction = n1 / n4;
+
+            // Menampilkan bagian output
+            document.getElementById('solutionBox').style.display = 'block';
+
+            // Menulis langkah-langkah ke HTML sesuai format gambar
+            document.getElementById('step1').innerHTML = `1. &nbsp; n2 = ${n1} rpm * (${N1}/${N2}) = ${n2.toFixed(1)} rpm`;
+            document.getElementById('step2').innerHTML = `2. &nbsp; n3 = n2`;
+            document.getElementById('step3').innerHTML = `3. &nbsp; n4 = ${n2.toFixed(1)} rpm * (${N3}/${N4}) = ${n4.toFixed(1)} rpm`;
+            document.getElementById('step4').innerHTML = `4. &nbsp; Total reduction = ${n1} / ${n4.toFixed(1)} = ${totalReduction.toFixed(1)} (or ${totalReduction.toFixed(1)}:1)`;
+            
+            // Catatan Torsi
+            document.getElementById('torqueNote').innerHTML = `Torque?? Increases by ${totalReduction.toFixed(1)}!!<br>Power?? Stays the same throughout!`;
+        }
+    </script>
+</body>
+</html>
